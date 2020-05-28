@@ -1,5 +1,5 @@
-#Final Group Project CMPM 163#\
-#Stylized Cel-shading in a 3D Environment#
+Final Group Project CMPM 163\
+Stylized Cel-shading in a 3D Environment
 ---
 **Andrew Chow**\
 **Nick Gleason**\
