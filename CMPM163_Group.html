@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Lab 2: Intro to Three.js Part 2</title>
+		<title>CMPM163 Final: 3D Cel Shading</title>
 		<style>
 			body { margin: 0; }
 			canvas { display: block; }
@@ -22,29 +22,42 @@ src="../three.js-master/examples/js/loaders/GLTFLoader.js"></script>
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
-      camera.position.x = 100;
-      camera.position.y = 9;
-      camera.position.z = 10;
+      camera.position.set(100, 9, 10);
+	  //camera.position.x = 100;
+      //camera.position.y = 9;
+      //camera.position.z = 10;
+	  camera.lookAt(scene.position);
 
 
 	var light = new THREE.PointLight(0xffffff, 1, 1000);
 	light.position.set(50, 50, 50);
 	scene.add(light);
 
-
+	var mesh;
 	var loader = new THREE.GLTFLoader();
 	loader.load('CMPM163_Group2.gltf', function (gltf) {
-	gltf.scene.position.x=0;
-	gltf.scene.scale.x = 1;
-	scene.add(gltf.scene);
-	}, function (xhr) {
-	console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
-	}, function (error) {
-	console.error(error);
+		mesh = gltf.scene.children[0];
+		mesh.position.x=0;
+		mesh.position.y = -10;
+		mesh.scale.x = 1;
+		mesh.traverse((o) => {
+			if (o.isMesh) o.material = new THREE.MeshToonMaterial( { color: 0x4287f5 });
+		});
+		console.log(mesh);
+		scene.add(mesh);
+		}, function (xhr) {
+		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+		}, function (error) {
+		console.error(error);
 	});
 
 	function animate() {
 			requestAnimationFrame(animate);
+			
+			var timer = Date.now() * .0005;
+			mesh.rotation.y = timer;
+			camera.lookAt(scene.position);
+			
 			renderer.render(scene, camera);
 	}
 	
