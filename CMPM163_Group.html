@@ -33,7 +33,28 @@ src="../three.js-master/examples/js/loaders/GLTFLoader.js"></script>
 
 
 	var loader = new THREE.GLTFLoader();
-	loader.load('CMPM163_Group2.gltf', function (gltf) {
+	loader.load('CMPM163_Group_2_Right.gltf', function (gltf) {
+	gltf.scene.position.x=0;
+	gltf.scene.scale.x = 1;
+	scene.add(gltf.scene);
+	}, function (xhr) {
+	console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	}, function (error) {
+	console.error(error);
+	});
+
+	loader.load('CMPM163_Group_2_Left.gltf', function (gltf) {
+	gltf.scene.position.x=0;
+	gltf.scene.scale.x = 1;
+	scene.add(gltf.scene);
+	}, function (xhr) {
+	console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	}, function (error) {
+	console.error(error);
+	});
+
+	
+	loader.load('CMPM163_Group_2_Cube.gltf', function (gltf) {
 	gltf.scene.position.x=0;
 	gltf.scene.scale.x = 1;
 	scene.add(gltf.scene);
