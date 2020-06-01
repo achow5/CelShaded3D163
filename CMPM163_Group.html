@@ -42,6 +42,7 @@ src="../three.js-master/examples/js/loaders/GLTFLoader.js"></script>
 		mesh.scale.x = 1;
 		mesh.traverse((o) => {
 			if (o.isMesh) o.material = new THREE.MeshToonMaterial( { color: 0x4287f5 });
+			//if (o.isMesh) o.material = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
 		});
 		console.log(mesh);
 		scene.add(mesh);
