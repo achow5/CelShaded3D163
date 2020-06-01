@@ -33,30 +33,59 @@ src="../three.js-master/examples/js/loaders/GLTFLoader.js"></script>
 	light.position.set(50, 50, 50);
 	scene.add(light);
 
-	var mesh;
+	var mesh1;
+	var mesh2;
 	var loader = new THREE.GLTFLoader();
-	loader.load('CMPM163_Group2.gltf', function (gltf) {
-		mesh = gltf.scene.children[0];
-		mesh.position.x=0;
-		mesh.position.y = -10;
-		mesh.scale.x = 1;
-		mesh.traverse((o) => {
+
+	loader.load('CMPM163_Group_2_Right.gltf', function (gltf) {
+		mesh1 = gltf.scene.children[0];
+		mesh1.position.x=0;
+		mesh1.position.y = -10;
+		mesh1.scale.x = 1;
+		mesh1.traverse((o) => {
 			if (o.isMesh) o.material = new THREE.MeshToonMaterial( { color: 0x4287f5 });
 			//if (o.isMesh) o.material = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
 		});
-		console.log(mesh);
-		scene.add(mesh);
-		}, function (xhr) {
+		scene.add(mesh1);
+	}, function (xhr) {
 		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
-		}, function (error) {
+	}, function (error) {
 		console.error(error);
+	});
+
+	loader.load('CMPM163_Group_2_Left.gltf', function (gltf) {
+		mesh2 = gltf.scene.children[0];
+		mesh2.position.x=0;
+		mesh2.position.y = -10;
+		mesh2.scale.x = 1;
+		mesh2.traverse((o) => {
+			if (o.isMesh) o.material = new THREE.MeshToonMaterial( { color: 0xe32d36 });
+			//if (o.isMesh) o.material = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
+		});
+		scene.add(mesh2);
+	}, function (xhr) {
+	console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	}, function (error) {
+	console.error(error);
+	});
+
+	
+	loader.load('CMPM163_Group_2_Cube.gltf', function (gltf) {
+	gltf.scene.position.x=0;
+	gltf.scene.scale.x = 1;
+	scene.add(gltf.scene);
+	}, function (xhr) {
+	console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	}, function (error) {
+	console.error(error);
 	});
 
 	function animate() {
 			requestAnimationFrame(animate);
 			
 			var timer = Date.now() * .0005;
-			mesh.rotation.y = timer;
+			mesh1.rotation.y = timer;
+			mesh2.rotation.y = timer;
 			camera.lookAt(scene.position);
 			
 			renderer.render(scene, camera);
