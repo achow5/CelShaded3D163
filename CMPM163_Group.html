@@ -35,7 +35,9 @@
 			var mesh2;
 			var loader = new THREE.GLTFLoader();
 
-			loader.load('CMPM163_Group_2_Right.gltf', function (gltf) {
+			// material used is MeshToonMaterial.js found in Three.js examples
+			// MeshPhongMaterial is used to show regular shading
+			loader.load('CMPM163_Group_2_Right.gltf', function (gltf) { // first model, blue fighter
 				mesh1 = gltf.scene.children[0];
 				mesh1.position.x=0;
 				mesh1.position.y = -10;
@@ -51,7 +53,7 @@
 				console.error(error);
 			});
 
-			loader.load('CMPM163_Group_2_Left.gltf', function (gltf) {
+			loader.load('CMPM163_Group_2_Left.gltf', function (gltf) { // second model, red fighter
 				mesh2 = gltf.scene.children[0];
 				mesh2.position.x=0;
 				mesh2.position.y = -10;
@@ -66,7 +68,8 @@
 			}, function (error) {
 				console.error(error);
 			});
-			loader.load('CMPM163_Group_2_Cube.gltf', function (gltf) {
+
+			loader.load('CMPM163_Group_2_Cube.gltf', function (gltf) { // Stage, but it doesn't show up for some reason
 				gltf.scene.position.x=0;
 				gltf.scene.scale.x = 1;
 				scene.add(gltf.scene);
@@ -75,13 +78,15 @@
 			}, function (error) {
 				console.error(error);
 			});
+			// Adds in an cartoonish outline effect, where we can change parameters like thickness and color
+			// must be rendered to show up in the final code
 			var outlineEffect = new THREE.OutlineEffect(renderer,{
 				defaultThickness: 0.005,
 				defaultColor: [0,0,0]
 			});
 			function animate() {
 				requestAnimationFrame(animate);
-
+				// rotates the models to demonstrate how the lighting effect works
 				var timer = Date.now() * .0005;
 				mesh1.rotation.y = timer;
 				mesh2.rotation.y = timer;
