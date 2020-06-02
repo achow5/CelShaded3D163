@@ -70,9 +70,13 @@
 			});
 
 			loader.load('CMPM163_Group_2_Cube.gltf', function (gltf) { // Stage, but it doesn't show up for some reason
-				gltf.scene.position.x=0;
-				gltf.scene.scale.x = 1;
-				scene.add(gltf.scene);
+				mesh3 = gltf.scene.children[0];
+				mesh3.position.x=0;
+				mesh3.position.y = -10.2;
+				mesh3.traverse((o)=> {
+					if(o.isMesh) o.material = new THREE.MeshToonMaterial({color:0xFFFFFF});
+				});
+				scene.add(mesh3);
 			}, function (xhr) {
 				console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
 			}, function (error) {
@@ -90,6 +94,7 @@
 				var timer = Date.now() * .0005;
 				mesh1.rotation.y = timer;
 				mesh2.rotation.y = timer;
+				mesh3.rotation.y = timer;
 				camera.lookAt(scene.position);
 
 				renderer.render(scene, camera);
