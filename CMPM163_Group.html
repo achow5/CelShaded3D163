@@ -23,10 +23,25 @@
 			renderer.setClearColor(0xBDBDBD, 1.0);
       document.body.appendChild(renderer.domElement);
       camera.position.set(100, 9, 10);
-	  	//camera.position.x = 100;
-      //camera.position.y = 9;
-      //camera.position.z = 10;
 	  	camera.lookAt(scene.position);
+			var celShaded = true;
+
+			// materials
+			var blueMaterial = new THREE.MeshToonMaterial({color: 0x4287f5});
+
+			document.onkeypress = function(event){
+				var x = event.key;
+				if(x == 'x'){
+					celShaded = true;
+					console.log(celShaded);
+					blueMaterial = new THREE.MeshToonMaterial({color: 0x4287f5});
+				}else if(x == 'c'){
+					celShaded = false;
+					console.log(celShaded);
+					blueMaterial = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
+				}
+			}
+
 
 			var light = new THREE.PointLight(0xffffff, 1, 1000);
 			light.position.set(50, 50, 50);
@@ -34,7 +49,6 @@
 			var mesh1;
 			var mesh2;
 			var loader = new THREE.GLTFLoader();
-
 			// material used is MeshToonMaterial.js found in Three.js examples
 			// MeshPhongMaterial is used to show regular shading
 			loader.load('CMPM163_Group_2_Right.gltf', function (gltf) { // first model, blue fighter
@@ -43,8 +57,9 @@
 				mesh1.position.y = -10;
 				mesh1.scale.x = 1;
 				mesh1.traverse((o) => {
-					if (o.isMesh) o.material = new THREE.MeshToonMaterial( { color: 0x4287f5 });
-					//if (o.isMesh) o.material = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
+					if (o.isMesh){
+						o.material = blueMaterial;
+					}
 				});
 				scene.add(mesh1);
 			}, function (xhr) {
@@ -82,12 +97,14 @@
 			}, function (error) {
 				console.error(error);
 			});
+
 			// Adds in an cartoonish outline effect, where we can change parameters like thickness and color
 			// must be rendered to show up in the final code
 			var outlineEffect = new THREE.OutlineEffect(renderer,{
 				defaultThickness: 0.005,
 				defaultColor: [0,0,0]
 			});
+
 			function animate() {
 				requestAnimationFrame(animate);
 				// rotates the models to demonstrate how the lighting effect works
@@ -96,7 +113,6 @@
 				mesh2.rotation.y = timer;
 				mesh3.rotation.y = timer;
 				camera.lookAt(scene.position);
-
 				renderer.render(scene, camera);
 				outlineEffect.render(scene, camera);
 			}
