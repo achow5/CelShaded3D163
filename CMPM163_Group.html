@@ -23,22 +23,26 @@
 		var scene = new THREE.Scene();
 		var camera = new THREE.PerspectiveCamera(8,window.innerWidth/window.innerHeight, 0.4, 1000);
 		var renderer = new THREE.WebGLRenderer();
+		// Adds in an cartoonish outline effect, where we can change parameters like thickness and color
+		// must be rendered to show up in the final code
 		var outlineEffect = new THREE.OutlineEffect(renderer,{
 			defaultThickness: 0.005,
 			defaultColor: [0,0,0]
 		});
+		// this is the boolean used to determine if we use celShading (true) or phongShading (false)
 		var celShaded = true;
+		// keyboard event that determines if the models will be cel-shaded to phong-shaded.
 		document.onkeypress = function(event){
 			var x = event.key;
 			if(x == 'x'){
-				while(scene.children.length > 0){
+				while(scene.children.length > 0){ // clears the scene before we call init() again
 					scene.remove(scene.children[0]);
 				}
 				celShaded = true;
 				console.log(celShaded);
 				init(celShaded);
 			}else if(x == 'c'){
-				while(scene.children.length > 0){
+				while(scene.children.length > 0){ // clears the scene before we call init() again
 					scene.remove(scene.children[0]);
 				}
 				celShaded = false;
@@ -47,16 +51,18 @@
 			}
 		}
 
-		function init(celShaded){
+		function init(celShaded){ // init loads in the scene
       camera.rotateX(0.05);
       camera.rotateY(1.44);
       camera.rotateZ(-0.05);
       renderer.setSize(window.innerWidth, window.innerHeight);
-			renderer.setClearColor(0xBDBDBD, 1.0);
+			renderer.setClearColor(0xBDBDBD, 1.0); // sets the background color
       document.body.appendChild(renderer.domElement);
       camera.position.set(100, 9, 10);
 	  	camera.lookAt(scene.position);
-			// materials
+			// materials that will be used for each of our models
+			// material used is MeshToonMaterial.js found in Three.js examples
+			// MeshPhongMaterial is used to show regular shading
 			if(celShaded == true){
 				var blueMaterial = new THREE.MeshToonMaterial({color: 0x4287f5});
 				var redMaterial = new THREE.MeshToonMaterial( { color: 0xe32d36 });
@@ -66,18 +72,13 @@
 				var redMaterial = new THREE.MeshPhongMaterial( { color: 0xe32d36 });
 				var whiteMaterial = new THREE.MeshPhongMaterial({color:0xFFFFFF});
 			}
-
-
-
-
 			var light = new THREE.PointLight(0xffffff, 1, 1000);
 			light.position.set(50, 50, 50);
 			scene.add(light);
 			var mesh1;
 			var mesh2;
 			var loader = new THREE.GLTFLoader();
-			// material used is MeshToonMaterial.js found in Three.js examples
-			// MeshPhongMaterial is used to show regular shading
+
 			loader.load('CMPM163_Group_2_Right.gltf', function (gltf) { // first model, blue fighter
 				mesh1 = gltf.scene.children[0];
 				mesh1.position.x=0;
@@ -100,7 +101,6 @@
 				mesh2.scale.x = 1;
 				mesh2.traverse((o) => {
 					if (o.isMesh) o.material = redMaterial;
-					//if (o.isMesh) o.material = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
 				});
 				scene.add(mesh2);
 			}, function (xhr) {
@@ -123,8 +123,7 @@
 				console.error(error);
 			});
 
-			// Adds in an cartoonish outline effect, where we can change parameters like thickness and color
-			// must be rendered to show up in the final code
+
 			function animate() {
 				requestAnimationFrame(animate);
 				// rotates the models to demonstrate how the lighting effect works
@@ -134,6 +133,7 @@
 				mesh3.rotation.y = timer;
 				camera.lookAt(scene.position);
 				renderer.render(scene, camera);
+				// renders the outlines only if celShaded is true
 				if(celShaded == true){
 					outlineEffect.render(scene, camera);
 				}
