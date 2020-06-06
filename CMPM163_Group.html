@@ -9,38 +9,59 @@
 		</style>
 	</head>
 	<body>
+		<p>Press X or C to load the scene. X  loads cel-shaded and outlined models. C loads phong-shaded models. You can switch between them by pressing X or C again. </p>
 		<script src="../three.js-master/build/three.js"></script>
 		<script src="../three.js-master/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="../three.js-master/examples/js/effects/OutlineEffect.js"></script>
 		<script>
-      var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera(8,window.innerWidth/window.innerHeight, 0.4, 1000);
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(8,window.innerWidth/window.innerHeight, 0.4, 1000);
+		var renderer = new THREE.WebGLRenderer();
+		var outlineEffect = new THREE.OutlineEffect(renderer,{
+			defaultThickness: 0.005,
+			defaultColor: [0,0,0]
+		});
+		var celShaded = true;
+		document.onkeypress = function(event){
+			var x = event.key;
+			if(x == 'x'){
+				while(scene.children.length > 0){
+					scene.remove(scene.children[0]);
+				}
+				celShaded = true;
+				console.log(celShaded);
+				init(celShaded);
+			}else if(x == 'c'){
+				while(scene.children.length > 0){
+					scene.remove(scene.children[0]);
+				}
+				celShaded = false;
+				console.log(celShaded);
+				init(celShaded);
+			}
+		}
+
+		function init(celShaded){
       camera.rotateX(0.05);
       camera.rotateY(1.44);
       camera.rotateZ(-0.05);
-      var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.setClearColor(0xBDBDBD, 1.0);
       document.body.appendChild(renderer.domElement);
       camera.position.set(100, 9, 10);
 	  	camera.lookAt(scene.position);
-			var celShaded = true;
-
 			// materials
-			var blueMaterial = new THREE.MeshToonMaterial({color: 0x4287f5});
-
-			document.onkeypress = function(event){
-				var x = event.key;
-				if(x == 'x'){
-					celShaded = true;
-					console.log(celShaded);
-					blueMaterial = new THREE.MeshToonMaterial({color: 0x4287f5});
-				}else if(x == 'c'){
-					celShaded = false;
-					console.log(celShaded);
-					blueMaterial = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
-				}
+			if(celShaded == true){
+				var blueMaterial = new THREE.MeshToonMaterial({color: 0x4287f5});
+				var redMaterial = new THREE.MeshToonMaterial( { color: 0xe32d36 });
+				var whiteMaterial = new THREE.MeshToonMaterial({color:0xFFFFFF});
+			}else if(celShaded == false){
+				var blueMaterial = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
+				var redMaterial = new THREE.MeshPhongMaterial( { color: 0xe32d36 });
+				var whiteMaterial = new THREE.MeshPhongMaterial({color:0xFFFFFF});
 			}
+
+
 
 
 			var light = new THREE.PointLight(0xffffff, 1, 1000);
@@ -57,10 +78,8 @@
 				mesh1.position.y = -10;
 				mesh1.scale.x = 1;
 				mesh1.traverse((o) => {
-					if (o.isMesh){
-						o.material = blueMaterial;
-					}
-				});
+					if (o.isMesh)	o.material = blueMaterial;
+					});
 				scene.add(mesh1);
 			}, function (xhr) {
 				console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -74,7 +93,7 @@
 				mesh2.position.y = -10;
 				mesh2.scale.x = 1;
 				mesh2.traverse((o) => {
-					if (o.isMesh) o.material = new THREE.MeshToonMaterial( { color: 0xe32d36 });
+					if (o.isMesh) o.material = redMaterial;
 					//if (o.isMesh) o.material = new THREE.MeshPhongMaterial( { color: 0x4287f5 });
 				});
 				scene.add(mesh2);
@@ -89,7 +108,7 @@
 				mesh3.position.x=0;
 				mesh3.position.y = -10.2;
 				mesh3.traverse((o)=> {
-					if(o.isMesh) o.material = new THREE.MeshToonMaterial({color:0xFFFFFF});
+					if(o.isMesh) o.material = whiteMaterial;
 				});
 				scene.add(mesh3);
 			}, function (xhr) {
@@ -100,11 +119,6 @@
 
 			// Adds in an cartoonish outline effect, where we can change parameters like thickness and color
 			// must be rendered to show up in the final code
-			var outlineEffect = new THREE.OutlineEffect(renderer,{
-				defaultThickness: 0.005,
-				defaultColor: [0,0,0]
-			});
-
 			function animate() {
 				requestAnimationFrame(animate);
 				// rotates the models to demonstrate how the lighting effect works
@@ -114,10 +128,13 @@
 				mesh3.rotation.y = timer;
 				camera.lookAt(scene.position);
 				renderer.render(scene, camera);
-				outlineEffect.render(scene, camera);
+				if(celShaded == true){
+					outlineEffect.render(scene, camera);
+				}
 			}
 
 			animate();
+		}
 		</script>
 	</body>
 </html>
