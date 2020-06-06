@@ -82,7 +82,7 @@
 			loader.load('CMPM163_Group_2_Right.gltf', function (gltf) { // first model, blue fighter
 				mesh1 = gltf.scene.children[0];
 				mesh1.position.x=0;
-				mesh1.position.y = -10;
+				mesh1.position.y = -10.18;
 				mesh1.scale.x = 1;
 				mesh1.traverse((o) => {
 					if (o.isMesh)	o.material = blueMaterial;
@@ -123,6 +123,21 @@
 				console.error(error);
 			});
 
+			loader.load('CMPM163_Group_2_Particles.gltf', function (gltf) { // Stage, but it doesn't show up for some reason
+				mesh4 = gltf.scene.children[0];
+				mesh4.position.x=0;
+				mesh4.position.y = -10;
+				mesh4.scale.x = 1;
+				mesh4.traverse((o)=> {
+					if(o.isMesh) o.material = whiteMaterial;
+				});
+				scene.add(mesh4);
+			}, function (xhr) {
+				console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+			}, function (error) {
+				console.error(error);
+			});
+
 
 			function animate() {
 				requestAnimationFrame(animate);
@@ -131,6 +146,7 @@
 				mesh1.rotation.y = timer;
 				mesh2.rotation.y = timer;
 				mesh3.rotation.y = timer;
+				mesh4.rotation.y = timer;
 				camera.lookAt(scene.position);
 				renderer.render(scene, camera);
 				// renders the outlines only if celShaded is true
