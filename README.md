@@ -9,6 +9,6 @@ Our idea is to have two 3D models and use a stylized shader in order to make the
 
 **What we did:**\
 **Andrew**: Placed and posed the models to be used for the scene and set up the skeleton for the project code. (Model created by Luciano Munoz for a previous course)\
-**Nick**: Found the cel-shading material MeshToonMaterial that would be used to give the cartoon shading effect to the models.\
+**Nick**: Found the cel-shading material MeshToonMaterial that would be used to give the cartoon shading effect to the models and created a rotating skybox that is displayed in the background.\
 **Daniel**: Found the outlining effect that would be used to give a bold black outline to the models and programmed the keyboard buttons X and C to switch between cel-shading and phong-shading.
 
